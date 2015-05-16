@@ -1,9 +1,7 @@
 import unittest
 import os
-import mock
 import images2gif
 from bot import images
-import PIL
 
 
 class ImageMagicTests(unittest.TestCase):
@@ -15,6 +13,11 @@ class ImageMagicTests(unittest.TestCase):
             'CFGO3viVIAA9Vwz.jpg'
         ]
 
+        self.similar_images = [
+            'CFGXK9XUUAEQ4Xv.jpg',
+            'CFGZ7HCUIAAKVlc.jpg'
+        ]
+
         self.image_urls = [
             'https://pbs.twimg.com/media/CFGGnT8VAAE-WHH.jpg',
             'https://pbs.twimg.com/media/CFGMHrRUMAAMkD5.jpg',
@@ -24,10 +27,9 @@ class ImageMagicTests(unittest.TestCase):
         self.base_path = os.path.dirname(__file__)
         self.output_file = os.path.join(self.base_path, 'assets/output/output.gif')
 
-    def tearDown(self):
         if os.path.isfile(self.output_file):
             os.remove(self.output_file)
-        
+
     def test_url_filename(self):
         for i, url in enumerate(self.image_urls):
             self.assertEqual(images.url_filename(url), self.image_names[i])
@@ -40,13 +42,13 @@ class ImageMagicTests(unittest.TestCase):
         img_path = os.path.join(base_path, 'assets', self.image_names[0])
         self.assertIsNotNone(images.get_image_from_file(img_path))
 
+    def INTEGRATION_download_and_gifify_images(self):
+
+        files = images.get_images_from_urls(self.image_urls)
+        output_path = images.make_gif_from_files(self.output_file, files)
+        self.assertTrue(os.path.isfile(output_path))
+
     def test_gifify_images(self):
-
-        # Monkey-patch
-
-        from bot import monkey
-        monkey.patch_image_headers()
-
         files = []
 
         for filename in self.image_names:
@@ -54,8 +56,21 @@ class ImageMagicTests(unittest.TestCase):
             img_file = images.get_image_from_file(img_path)
             files.append(img_file)
 
-        self.assertFalse(os.path.isfile(self.output_file))
-
-        images2gif.writeGif(filename=self.output_file, images=files, duration=0.5)
+        images2gif.writeGif(filename=self.output_file, images=files, duration=0.1 * len(files))
         
         self.assertTrue(os.path.isfile(self.output_file))
+
+    def test_detect_similar_images(self):
+
+        from PIL import Image
+
+        img1 = Image.open(os.path.join(self.base_path, 'assets', self.similar_images[0]))
+        img2 = Image.open(os.path.join(self.base_path, 'assets', self.similar_images[1]))
+        img3 = Image.open(os.path.join(self.base_path, 'assets', self.image_names[0]))
+
+        self.assertEqual(img1.histogram(), img2.histogram())
+        self.assertNotEqual(img1.histogram(), img3.histogram())
+        self.assertNotEqual(img2.histogram(), img3.histogram())
+
+        self.assertEqual(1, len(images.filter_similar_images([img1, img2])))
+        self.assertEqual(2, len(images.filter_similar_images([img1, img3])))

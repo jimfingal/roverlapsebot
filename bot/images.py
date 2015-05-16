@@ -1,7 +1,26 @@
 import os
+import requests
 from PIL import Image
 from cStringIO import StringIO
-import requests
+import urlparse
+from collections import namedtuple
+
+ImageFile = namedtuple('ImageFile', ['img', 'filename'])
+
+
+def url_filename(url):
+    """Get the filename portion of a URL."""
+    return os.path.basename(urlparse.urlparse(url).path)
+
+
+def get_image_from_file(path):
+    """Tries to get an image from a file. Returns None if doesn't exist."""
+    try:
+        img = Image.open(path)
+        return img
+    except IOError as e:
+        print e
+        return None
 
 
 def get_image_from_url(url):

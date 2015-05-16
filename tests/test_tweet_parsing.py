@@ -57,6 +57,5 @@ class TweetParsingTest(unittest.TestCase):
             last = image.ts
  
     def test_parse_tweets(self):
-
         parsed_tweets = parsing.parse_tweets(self.tweets)
-        print parsed_tweets
+        # TODO: test

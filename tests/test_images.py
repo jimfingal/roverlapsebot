@@ -1,4 +1,5 @@
 import unittest
+from mock import patch
 import os
 import images2gif
 from bot import images
@@ -74,3 +75,11 @@ class ImageMagicTests(unittest.TestCase):
 
         self.assertEqual(1, len(images.filter_similar_images([img1, img2])))
         self.assertEqual(2, len(images.filter_similar_images([img1, img3])))
+
+    def test_output_path(self):
+        with patch('time.time', return_value='foo.bar'):
+            path = images.get_output_path()
+            self.assertEqual(
+                path,
+                os.path.abspath(os.path.join(self.base_path, "../output/foo-bar.gif"))
+            )

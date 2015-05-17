@@ -17,4 +17,14 @@ class BotTest(unittest.TestCase):
 
     def test_make_gif(self):
 
-        gif = bot.make_gif(self.output_file, self.tweets, hours=3)
+        if False:
+            parsed_tweets = bot.parse_and_filter_tweets(self.tweets, hours=3)
+            gif_path = bot.make_gif(self.output_file, parsed_tweets)
+            self.assertEqual(gif_path, self.output_file)
+            self.assertTrue(os.path.isfile(gif_path))
+
+    def test_tweet_test(self):
+
+        parsed_tweets = bot.parse_and_filter_tweets(self.tweets)
+        text = bot.get_tweet_text(parsed_tweets)
+        self.assertEqual(text, "Summary from Sat May 16 00:42:16 2015 to Sat May 16 04:21:36 2015")

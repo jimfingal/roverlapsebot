@@ -15,7 +15,7 @@ def get_time_and_media(tweet):
     """Returns time and media from a tweet. Raises KeyError if
     the tweet doesn't have an image, so only pass tweets with images"""
     datetime = parse(tweet['created_at'])
-    media = tweet['entities']['media'][0].get('media_url_https')
+    media = tweet['entities']['media'][0].get('media_url')
 
     return PostedImage(ts=datetime, media=media)
 

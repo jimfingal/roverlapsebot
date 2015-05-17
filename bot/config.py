@@ -1,6 +1,6 @@
 import os
 
-app_name = "HWAETBOT"
+app_name = "ROVERLAPSE"
 
 consumer_key = os.environ.get(app_name + '_CONSUMER_KEY')
 consumer_secret = os.environ.get(app_name + '_CONSUMER_SECRET')

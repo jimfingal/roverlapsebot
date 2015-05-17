@@ -20,7 +20,8 @@ class TweetParsingTest(unittest.TestCase):
 
         self.assertEqual(type(ts), datetime)
         self.assertEqual(type(media), unicode)
-        self.assertIn('https', media)
+        self.assertIn('http', media)
+        self.assertNotIn('https', media)
 
         with self.assertRaises(KeyError):
             parsing.get_time_and_media(self.no_media)
@@ -33,7 +34,8 @@ class TweetParsingTest(unittest.TestCase):
 
         self.assertEqual(type(posted_image.ts), datetime)
         self.assertEqual(type(posted_image.media), unicode)
-        self.assertIn('https', posted_image.media)
+        self.assertIn('http', posted_image.media)
+        self.assertNotIn('https', posted_image.media)
 
     def test_filter_only_with_dates(self):
 

@@ -1,5 +1,6 @@
 import time
 import logging
+import arrow
 
 import click
 from twython import Twython
@@ -27,7 +28,15 @@ def chunks(l, n):
 @click.command()
 @click.option('--post', is_flag=True, help='Whether to post gif to twitter.')
 @click.option('--hours', default=4, help='Number of hours to pull from.')
-def run_bot(post, hours):
+@click.option('--hour_limited', is_flag=True, help='Whether to limit runtime by hour')
+def run_bot(post, hours, hour_limited):
+
+    now = arrow.get().to('US/Pacific')
+
+    if hour_limited and now.hour % hours != 0:
+        logging.info("Not allowed to run this hour: %s" % now)
+        return
+
     logging.info("Running bot. Post=%s" % post)
 
     twython = get_twython()

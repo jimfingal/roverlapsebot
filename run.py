@@ -37,7 +37,7 @@ def run_bot(post, hours):
     parsed_tweets = bot.parse_and_filter_tweets(tweets, hours=hours)
 
     # If we have too many tweets the image is really big, so chunk it.
-    for chunk in chunks(parsed_tweets, 20):
+    for chunk in chunks(parsed_tweets, 25):
 
         # Grab the message and gif
         logging.debug("Processing chunk of tweets: %s" % chunk)
@@ -47,6 +47,7 @@ def run_bot(post, hours):
 
         logging.info("Making GIF for: %s :: %s" % (message, output_path))
         gif_path = bot.make_gif(output_path, chunk)
+        logging.info("Created %s" % output_path)
 
         if post:
             logging.info("Uploading GIF to twitter")

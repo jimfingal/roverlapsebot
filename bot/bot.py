@@ -32,7 +32,7 @@ def make_gif(output_file, parsed_tweets):
 
     # Sometimes the same image is posted twice in a row; fiter these
     filtered_files = images.filter_similar_images(files)
-    resized_images = images.resize_images(filtered_files, 400)
+    resized_images = images.resize_images(filtered_files, 350)
     
     # Make a GIF!
     output_path = images.make_gif_from_files(output_file, resized_images)

@@ -28,7 +28,7 @@ def url_filename(url):
     return os.path.basename(urlparse.urlparse(url).path)
 
 
-def make_gif_from_files(output_path, files, img_duration=0.1):
+def make_gif_from_files(output_path, files, img_duration=0.125):
     images2gif.writeGif(filename=output_path, images=files, duration=img_duration)
     return output_path
 

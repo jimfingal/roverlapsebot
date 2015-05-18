@@ -58,6 +58,15 @@ class TweetParsingTest(unittest.TestCase):
                 self.assertGreater(image.ts, last)
             last = image.ts
  
-    def test_parse_tweets(self):
+    def test_time_filtering_tweets(self):
+
         parsed_tweets = parsing.parse_tweets(self.tweets)
-        # TODO: test
+
+        self.assertGreater(
+            len(parsing.only_last_n_hours_of_tweets(parsed_tweets, 2)),
+            len(parsing.only_last_n_hours_of_tweets(parsed_tweets, 1))
+        )
+        
+        time_limited = parsing.only_last_n_hours_of_tweets(parsed_tweets, 1)
+
+        self.assertGreater(time_limited[0].ts, parsed_tweets[0].ts)

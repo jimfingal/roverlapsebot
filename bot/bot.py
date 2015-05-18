@@ -1,5 +1,3 @@
-import datetime
-
 from . import parsing
 from . import images
 
@@ -15,11 +13,7 @@ def parse_and_filter_tweets(tweet_list, hours=4):
 
     # Parse out datetime, url pairs from tweets
     parsed_tweets = parsing.parse_tweets(tweet_list)
-
-    # Filter down to the last N hours of tweets
-    last_tweet = parsed_tweets[-1]
-    time_filter = last_tweet.ts - datetime.timedelta(minutes=hours * 60)
-    time_limited = filter(lambda tweet: tweet.ts > time_filter, parsed_tweets)
+    time_limited = parsing.only_last_n_hours_of_tweets(parsed_tweets, hours)
 
     return time_limited
 
